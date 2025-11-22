@@ -1,28 +1,32 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { Owner } from "../../types/api.types";
+import { OwnerListItem } from "../../types/api.types";
+import { useFavorites } from "../../store/favorites";
 
 interface OwnerCardProps {
-  data: Owner;
+  data: OwnerListItem;
 }
 
 export default function OwnerCard({ data }: OwnerCardProps) {
   const router = useRouter();
+  const initials = `${(data.firstName || "").charAt(0)}${(data.lastName || "").charAt(0)}`.toUpperCase();
+  const { favorites, toggle } = useFavorites();
+  const isFav = Boolean(favorites[data.id]);
 
   return (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => router.push(`/owners/${data._id}`)}
-    >
-      {data.images?.[0] && (
-        <Image source={{ uri: data.images[0] }} style={styles.image} />
-      )}
-      <View style={styles.content}>
-        <Text style={styles.title} numberOfLines={2}>
-          {data.name}
-        </Text>
-        <Text style={styles.category}>{data.category}</Text>
-        <Text style={styles.price}>${data.price.toFixed(2)}</Text>
+    <TouchableOpacity style={styles.card} onPress={() => router.push(`/owners/${data.id}`)}>
+      <View style={styles.row}>
+        <View style={styles.avatar}>
+          <Text style={styles.avatarText}>{initials}</Text>
+        </View>
+        <View style={styles.nameContainer}>
+          <Text style={styles.name}>{`${data.firstName} ${data.lastName}`}</Text>
+        </View>
+        <TouchableOpacity onPress={() => toggle(data.id)}>
+          <Text style={[styles.star, isFav ? styles.starFilled : styles.starOutline]}>
+            {isFav ? "★" : "☆"}
+          </Text>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -32,36 +36,47 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     borderRadius: 12,
-    marginBottom: 16,
+    marginBottom: 12,
+    padding: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  image: {
-    width: "100%",
-    height: 200,
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
-    resizeMode: "cover",
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  content: {
-    padding: 16,
+  avatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "#E5E7EB",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
+  avatarText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#6366F1",
   },
-  category: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 8,
+  nameContainer: {
+    flex: 1,
   },
-  price: {
+  name: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#111827",
+  },
+  star: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#007AFF",
+  },
+  starFilled: {
+    color: "#8B5CF6",
+  },
+  starOutline: {
+    color: "#D1D5DB",
   },
 });

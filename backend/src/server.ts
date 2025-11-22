@@ -6,13 +6,13 @@ import { Owner } from "./models/owner.model";
 import { Pet } from "./models/pet.model";
 import { Category } from "./models/category.model";
 import { User } from "./models/user.model";
-// import { seedOwners } from "./services/ownerService";
+import { seedData } from "./scripts/seed";
 
 const startServer = async () => {
   try {
     await connectDB();
     await connectRedis();
-    // await seedOwners();
+    await seedData();
 
     try {
       await Promise.all([
@@ -26,7 +26,7 @@ const startServer = async () => {
       console.warn("Index sync failed:", e);
     }
 
-    const port = parseInt(PORT || "3000")
+    const port = parseInt(PORT || "3000");
     const server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
       console.log(`Environment: ${process.env.NODE_ENV}`);

@@ -6,12 +6,16 @@ import { asyncHandler } from "../utils/asyncHandler"
 export const getOwners = asyncHandler(async (req: Request, res: Response) => {
   const { page, limit, search, sortBy } = req.query as any
   const result = await OwnerService.getAll({ page, limit, search, sortBy })
-  res.json(result.data.map((o: any) => ({
-    firstName: o.firstName,
-    lastName: o.lastName,
-    description: o.description,
-    favorites: Boolean(o.favorites),
-  })))
+  res.json(
+    result.data.map((o: any) => ({
+      id: String(o._id),
+      firstName: o.firstName,
+      lastName: o.lastName,
+      description: o.description,
+      favorites: Boolean(o.favorites),
+      isMaster: Boolean(o.isMaster),
+    }))
+  )
 })
 
 export const getOwner = asyncHandler(async (req: Request, res: Response) => {

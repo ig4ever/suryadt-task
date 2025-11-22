@@ -8,6 +8,7 @@
     "dev": "nodemon src/server.ts",
     "test": "jest",
     "lint": "eslint .",
+    "seed": "ts-node src/scripts/seed.ts",
     "docker:down": "docker-compose -f docker-compose.dev.yml down -v && docker-compose -f docker-compose.prod.yml down -v",
     "docker:dev": "cp .env.dev .env &&npm run docker:down && docker compose -f docker-compose.dev.yml up --build -d && docker compose -f docker-compose.dev.yml logs -f core-api",
     "docker:prod": "cp .env.prod .env && npm run docker:down && docker compose -f docker-compose.prod.yml up --build -d",

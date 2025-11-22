@@ -1,19 +1,13 @@
-import {
-  useQuery,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ownerService } from "../services/owner.service";
+import { petService } from "../services/pet.service";
 
-export const useOwners = (limit: number = 10) => {
+export const useOwners = (limit: number = 10, sortBy: "name" | "cats" = "name", search?: string) => {
   return useInfiniteQuery({
-    queryKey: ["owners", limit],
-    queryFn: ({ pageParam = 1 }) => ownerService.getAll(pageParam, limit),
-    getNextPageParam: (lastPage: any) => {
-      return lastPage.pagination.hasNext
-        ? lastPage.pagination.page + 1
-        : undefined;
+    queryKey: ["owners", limit, sortBy, search],
+    queryFn: ({ pageParam = 1 }) => ownerService.getAll(pageParam, limit, sortBy, search),
+    getNextPageParam: (lastPage: any, _pages: any, lastPageParam: any) => {
+      return Array.isArray(lastPage) && lastPage.length === limit ? lastPageParam + 1 : undefined;
     },
     initialPageParam: 1,
   });
@@ -59,5 +53,35 @@ export const useDeleteOwner = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["owners"] });
     },
+  });
+};
+
+export const useCurrentMaster = () => {
+  return useQuery({
+    queryKey: ["master", "current"],
+    queryFn: () => ownerService.getCurrentMaster(),
+  });
+};
+
+export const useMakeMaster = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => ownerService.setMaster(id),
+    onSuccess: (_owner: any) => {
+      queryClient.invalidateQueries({ queryKey: ["master", "current"] });
+      queryClient.invalidateQueries({ queryKey: ["owners"] });
+    },
+  });
+};
+
+export const usePetsByMaster = (masterId: string, limit: number = 10) => {
+  return useInfiniteQuery({
+    queryKey: ["pets", masterId, limit],
+    queryFn: ({ pageParam = 1 }) => petService.getByMaster(masterId, pageParam, limit),
+    getNextPageParam: (lastPage: any, _pages: any, lastPageParam: any) => {
+      return Array.isArray(lastPage) && lastPage.length === limit ? lastPageParam + 1 : undefined;
+    },
+    enabled: !!masterId,
+    initialPageParam: 1,
   });
 };

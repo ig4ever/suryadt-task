@@ -2,6 +2,10 @@ import app from "./app";
 import { connectDB, disconnectDB } from "./config/database";
 import { connectRedis, disconnectRedis } from "./config/redis";
 import { PORT } from "./config/env";
+import { Owner } from "./models/owner.model";
+import { Pet } from "./models/pet.model";
+import { Category } from "./models/category.model";
+import { User } from "./models/user.model";
 // import { seedOwners } from "./services/ownerService";
 
 const startServer = async () => {
@@ -9,6 +13,18 @@ const startServer = async () => {
     await connectDB();
     await connectRedis();
     // await seedOwners();
+
+    try {
+      await Promise.all([
+        Owner.syncIndexes(),
+        Pet.syncIndexes(),
+        Category.syncIndexes(),
+        User.syncIndexes(),
+      ]);
+      console.log("Indexes synchronized");
+    } catch (e) {
+      console.warn("Index sync failed:", e);
+    }
 
     const port = parseInt(PORT || "3000")
     const server = app.listen(port, () => {

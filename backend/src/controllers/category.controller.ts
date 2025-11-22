@@ -6,7 +6,7 @@ import { asyncHandler } from "../utils/asyncHandler"
 export const getCategories = asyncHandler(async (req: Request, res: Response) => {
   const { page, limit, search } = req.query as any
   const result = await CategoryService.getAll({ page, limit, search })
-  res.json(new ApiResponse(200, result, "Categories retrieved"))
+  res.json(result.data.map((c: any) => ({ name: c.name })))
 })
 
 export const getCategory = asyncHandler(async (req: Request, res: Response) => {

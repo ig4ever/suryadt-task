@@ -9,7 +9,7 @@ export class CategoryService {
     const cacheKey = `categories:${page}:${limit}:${search || "none"}`
     const cached = await CacheService.get<any>(cacheKey)
     if (cached) return cached
-    let query = Category.find({ isActive: true })
+    let query = Category.find({})
     if (search) query = query.where({ $text: { $search: search } })
     const total = await Category.countDocuments(query.getFilter())
     const { query: q, page: p, limit: l } = Pagination.paginate(query, { page: parseInt(String(page)), limit: parseInt(String(limit)) })

@@ -37,7 +37,4 @@ export const defaultLimiter = createRateLimiter(
   parseInt(RATE_LIMIT_WINDOW || "15"),
   parseInt(RATE_LIMIT_MAX || "100")
 );
-export const authLimiter = createRateLimiter(
-  parseInt(RATE_LIMIT_WINDOW || "15"),
-  parseInt(RATE_LIMIT_MAX || "5")
-);
+export const authLimiter = createRateLimiter(1, 5);

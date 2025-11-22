@@ -1,7 +1,7 @@
 import { createClient, RedisClientType } from "redis";
 import { REDIS_HOST, REDIS_PORT, REDIS_ENABLED } from "./env";
 
-let redisClient: any;
+let redisClient: RedisClientType;
 
 export const connectRedis = async (): Promise<any> => {
   const enabled = String(REDIS_ENABLED || "false").toLowerCase() === "true";
@@ -23,7 +23,7 @@ export const connectRedis = async (): Promise<any> => {
   }
 };
 
-export const getRedisClient = (): any => {
+export const getRedisClient = (): RedisClientType => {
   if (!redisClient) {
     throw new Error("Redis client not initialized");
   }

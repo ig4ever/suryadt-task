@@ -4,9 +4,14 @@ import { ApiResponse } from "../utils/ApiResponse"
 import { asyncHandler } from "../utils/asyncHandler"
 
 export const getPets = asyncHandler(async (req: Request, res: Response) => {
-  const { page, limit, owner, category, search } = req.query as any
-  const result = await PetService.getAll({ page, limit, owner, category, search })
-  res.json(new ApiResponse(200, result, "Pets retrieved"))
+  const { page, limit, masterId, categoryId, search } = req.query as any
+  const result = await PetService.getAll({ page, limit, masterId, categoryId, search })
+  res.json(result.data.map((p: any) => ({
+    masterId: String(p.masterId),
+    categoryId: String(p.categoryId),
+    name: p.name,
+    dob: p.dob,
+  })))
 })
 
 export const getPet = asyncHandler(async (req: Request, res: Response) => {

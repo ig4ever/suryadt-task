@@ -4,9 +4,14 @@ import { ApiResponse } from "../utils/ApiResponse"
 import { asyncHandler } from "../utils/asyncHandler"
 
 export const getOwners = asyncHandler(async (req: Request, res: Response) => {
-  const { page, limit, search } = req.query as any
-  const result = await OwnerService.getAll({ page, limit, search })
-  res.json(new ApiResponse(200, result, "Owners retrieved"))
+  const { page, limit, search, sortBy } = req.query as any
+  const result = await OwnerService.getAll({ page, limit, search, sortBy })
+  res.json(result.data.map((o: any) => ({
+    firstName: o.firstName,
+    lastName: o.lastName,
+    description: o.description,
+    favorites: Boolean(o.favorites),
+  })))
 })
 
 export const getOwner = asyncHandler(async (req: Request, res: Response) => {
@@ -27,4 +32,21 @@ export const updateOwner = asyncHandler(async (req: Request, res: Response) => {
 export const deleteOwner = asyncHandler(async (req: Request, res: Response) => {
   await OwnerService.delete(req.params.id)
   res.json(new ApiResponse(200, null, "Owner deleted"))
+})
+
+export const makeMaster = asyncHandler(async (req: Request, res: Response) => {
+  const owner = await OwnerService.setMaster(req.params.id)
+  res.json(new ApiResponse(200, owner, "Master set"))
+})
+
+export const getMaster = asyncHandler(async (_req: Request, res: Response) => {
+  const master = await OwnerService.getCurrentMaster()
+  if (!master) return res.json(null)
+  return res.json({
+    firstName: master.firstName,
+    lastName: master.lastName,
+    description: master.description,
+    favorites: Boolean(master.favorites),
+    id: String((master as any)._id),
+  })
 })

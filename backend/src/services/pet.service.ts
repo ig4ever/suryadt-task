@@ -5,13 +5,13 @@ import { Pet } from "../models/pet.model"
 
 export class PetService {
   static async getAll(params: any) {
-    const { page = "1", limit = "10", owner, category, search } = params
-    const cacheKey = `pets:${page}:${limit}:${owner || "all"}:${category || "all"}:${search || "none"}`
+    const { page = "1", limit = "10", masterId, categoryId, search } = params
+    const cacheKey = `pets:${page}:${limit}:${masterId || "all"}:${categoryId || "all"}:${search || "none"}`
     const cached = await CacheService.get<any>(cacheKey)
     if (cached) return cached
-    let query = Pet.find({ isActive: true })
-    if (owner) query = query.where("owner").equals(owner)
-    if (category) query = query.where("category").equals(category)
+    let query = Pet.find({})
+    if (masterId) query = query.where("masterId").equals(masterId)
+    if (categoryId) query = query.where("categoryId").equals(categoryId)
     if (search) query = query.where({ $text: { $search: search } })
     const total = await Pet.countDocuments(query.getFilter())
     const { query: q, page: p, limit: l } = Pagination.paginate(query, { page: parseInt(String(page)), limit: parseInt(String(limit)) })

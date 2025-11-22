@@ -8,6 +8,7 @@ export const connectDB = async (): Promise<void> => {
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
+      autoIndex: (process.env.NODE_ENV || "development") !== "production",
     });
     console.log("MongoDB connected successfully");
   } catch (error) {

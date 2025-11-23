@@ -8,6 +8,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
+    "publish": "eas build --profile production --clear-cache",
+    "update": "eas update --branch production --clear-cache",
     "test": "jest"
   },
   "dependencies": {

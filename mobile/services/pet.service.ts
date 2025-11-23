@@ -9,6 +9,6 @@ export const petService = {
       masterId,
     });
     const { data } = await apiClient.get(`/pet?${params.toString()}`);
-    return data as Pet[];
+    return data?.data ?? data;
   },
 };

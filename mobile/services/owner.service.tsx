@@ -15,7 +15,7 @@ export const ownerService = {
     });
     if (search) params.append("search", search);
     const { data } = await apiClient.get(`/master?${params.toString()}`);
-    return data;
+    return data?.data ?? data;
   },
 
   async getById(id: string): Promise<Owner> {

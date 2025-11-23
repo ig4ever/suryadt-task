@@ -6,12 +6,13 @@ import { asyncHandler } from "../utils/asyncHandler"
 export const getPets = asyncHandler(async (req: Request, res: Response) => {
   const { page, limit, masterId, categoryId, search } = req.query as any
   const result = await PetService.getAll({ page, limit, masterId, categoryId, search })
-  res.json(result.data.map((p: any) => ({
+  const data = result.data.map((p: any) => ({
     masterId: String(p.masterId),
     categoryId: String(p.categoryId),
     name: p.name,
     dob: p.dob,
-  })))
+  }))
+  res.json({ ...result.pagination, data })
 })
 
 export const getPet = asyncHandler(async (req: Request, res: Response) => {

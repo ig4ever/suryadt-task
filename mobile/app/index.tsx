@@ -1,12 +1,24 @@
-import { View, FlatList, StyleSheet, ActivityIndicator, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { useOwners, useCurrentMaster } from "../hooks/useApi";
 import OwnerCard from "../components/atoms/OwnerCard";
 import { useState, useMemo } from "react";
 
 export default function OwnersScreen() {
   const [sortBy, setSortBy] = useState<"name" | "cats">("name");
-  const { data, isLoading, error, fetchNextPage, hasNextPage } = useOwners(10, sortBy);
+  const { data, isLoading, error, fetchNextPage, hasNextPage } = useOwners(
+    10,
+    sortBy
+  );
   const { data: master } = useCurrentMaster();
+
+  
 
   if (isLoading) {
     return (
@@ -19,12 +31,15 @@ export default function OwnersScreen() {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>Error loading owners</Text>
+        <Text style={styles.errorText}>Failed to retrieve data owners</Text>
       </View>
     );
   }
 
-  const owners = useMemo(() => (data?.pages.flatMap((page) => page) as any) || [], [data]);
+  const owners = useMemo(
+    () => (data?.pages.flatMap((page) => page) as any) || [],
+    [data]
+  );
 
   return (
     <View style={styles.container}>
@@ -32,7 +47,9 @@ export default function OwnersScreen() {
         <View style={styles.header}>
           <View style={styles.headerBadge}>
             <Text style={styles.headerBadgeText}>
-              {`${master.firstName.charAt(0)}${master.lastName.charAt(0)}`.toUpperCase()}
+              {`${master.firstName.charAt(0)}${master.lastName.charAt(
+                0
+              )}`.toUpperCase()}
             </Text>
           </View>
           <Text style={styles.headerTitle}>
@@ -43,8 +60,12 @@ export default function OwnersScreen() {
 
       <View style={styles.listHeaderRow}>
         <Text style={styles.sectionTitle}>Owners List</Text>
-        <TouchableOpacity onPress={() => setSortBy(sortBy === "name" ? "cats" : "name")}>
-          <Text style={styles.sortText}>Sort By: {sortBy === "name" ? "Name" : "Cats"}</Text>
+        <TouchableOpacity
+          onPress={() => setSortBy(sortBy === "name" ? "cats" : "name")}
+        >
+          <Text style={styles.sortText}>
+            Sort By: {sortBy === "name" ? "Name" : "Cats"}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -55,7 +76,9 @@ export default function OwnersScreen() {
         contentContainerStyle={styles.list}
         onEndReached={() => hasNextPage && fetchNextPage()}
         onEndReachedThreshold={0.5}
-        ListFooterComponent={hasNextPage ? <ActivityIndicator style={{ padding: 20 }} /> : null}
+        ListFooterComponent={
+          hasNextPage ? <ActivityIndicator style={{ padding: 20 }} /> : null
+        }
       />
     </View>
   );

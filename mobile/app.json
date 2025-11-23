@@ -5,10 +5,10 @@
     "version": "1.0.0",
     "runtimeVersion": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icons/app_icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/icons/app_icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,7 +21,7 @@
       "package": "com.rakhmat.suryadt"
     },
     "web": {
-      "favicon": "./assets/icon.png"
+      "favicon": "./assets/icons/app_icon.png"
     },
     "plugins": [
       "expo-router",

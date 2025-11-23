@@ -20,19 +20,70 @@ export const seedData = async () => {
     User.deleteMany({ username: "demo" }),
   ])
 
-  const category = await Category.create({ name: "Cat" })
+  const categories = await Category.insertMany([
+    { name: "Cat" },
+    { name: "Dog" },
+    { name: "Bird" },
+    { name: "Hamster" },
+    { name: "Fish" },
+  ])
+  const catCategory = categories.find((c: any) => c.name === "Cat") as any
+  const dogCategory = categories.find((c: any) => c.name === "Dog") as any
+  const birdCategory = categories.find((c: any) => c.name === "Bird") as any
+  const hamsterCategory = categories.find((c: any) => c.name === "Hamster") as any
+  const fishCategory = categories.find((c: any) => c.name === "Fish") as any
 
   const owners = await Owner.insertMany([
     { firstName: "John", lastName: "Lennon", description: "", favorites: false, isMaster: false },
     { firstName: "Paul", lastName: "McCartney", description: "", favorites: false, isMaster: false },
     { firstName: "George", lastName: "Harrison", description: "", favorites: false, isMaster: false },
     { firstName: "Ringo", lastName: "Starr", description: "", favorites: false, isMaster: false },
+    { firstName: "Freddie", lastName: "Mercury", description: "", favorites: false, isMaster: false },
+    { firstName: "David", lastName: "Bowie", description: "", favorites: false, isMaster: false },
+    { firstName: "Elton", lastName: "John", description: "", favorites: false, isMaster: false },
+    { firstName: "Mick", lastName: "Jagger", description: "", favorites: false, isMaster: false },
+    { firstName: "Keith", lastName: "Richards", description: "", favorites: false, isMaster: false },
+    { firstName: "Jim", lastName: "Morrison", description: "", favorites: false, isMaster: false },
+    { firstName: "Kurt", lastName: "Cobain", description: "", favorites: false, isMaster: false },
+    { firstName: "Adele", lastName: "Adkins", description: "", favorites: false, isMaster: false },
+    { firstName: "Taylor", lastName: "Swift", description: "", favorites: false, isMaster: false },
+    { firstName: "Beyonce", lastName: "Knowles", description: "", favorites: false, isMaster: false },
+    { firstName: "Ed", lastName: "Sheeran", description: "", favorites: false, isMaster: false },
+    { firstName: "Bruno", lastName: "Mars", description: "", favorites: false, isMaster: false },
+    { firstName: "Lady", lastName: "Gaga", description: "", favorites: false, isMaster: false },
+    { firstName: "Billie", lastName: "Eilish", description: "", favorites: false, isMaster: false },
+    { firstName: "Drake", lastName: "Graham", description: "", favorites: false, isMaster: false },
+    { firstName: "Kanye", lastName: "West", description: "", favorites: false, isMaster: false },
+    { firstName: "Sia", lastName: "Furler", description: "", favorites: false, isMaster: false },
   ])
 
-  const paul = owners.find(o => o.firstName === "Paul" && o.lastName === "McCartney") as any
+  const byName = (fn: string, ln: string) => owners.find(o => o.firstName === fn && o.lastName === ln) as any
+  const paul = byName("Paul", "McCartney")
+  const john = byName("John", "Lennon")
+  const george = byName("George", "Harrison")
+  const ringo = byName("Ringo", "Starr")
+  const taylor = byName("Taylor", "Swift")
+  const adele = byName("Adele", "Adkins")
   await Pet.insertMany([
-    { masterId: paul._id, categoryId: (category as any)._id, name: "Snowball", dob: "2021-11-01" },
-    { masterId: paul._id, categoryId: (category as any)._id, name: "Blackly", dob: "2023-08-01" },
+    // Cats
+    { masterId: paul._id, categoryId: catCategory._id, name: "Snowball", dob: "2021-11-01" },
+    { masterId: paul._id, categoryId: catCategory._id, name: "Blackly", dob: "2023-08-01" },
+    { masterId: john._id, categoryId: catCategory._id, name: "Mittens", dob: "2020-05-15" },
+    { masterId: george._id, categoryId: catCategory._id, name: "Whiskers", dob: "2019-02-20" },
+    { masterId: ringo._id, categoryId: catCategory._id, name: "Shadow", dob: "2022-07-04" },
+    { masterId: taylor._id, categoryId: catCategory._id, name: "Luna", dob: "2021-03-09" },
+    { masterId: taylor._id, categoryId: catCategory._id, name: "Leo", dob: "2022-12-25" },
+    { masterId: adele._id, categoryId: catCategory._id, name: "Oliver", dob: "2018-10-10" },
+    // Dogs
+    { masterId: john._id, categoryId: dogCategory._id, name: "Buddy", dob: "2017-04-12" },
+    { masterId: ringo._id, categoryId: dogCategory._id, name: "Max", dob: "2016-09-30" },
+    { masterId: george._id, categoryId: dogCategory._id, name: "Bella", dob: "2015-06-01" },
+    // Birds
+    { masterId: paul._id, categoryId: birdCategory._id, name: "Kiwi", dob: "2020-01-20" },
+    // Hamsters
+    { masterId: adele._id, categoryId: hamsterCategory._id, name: "Nibbles", dob: "2022-02-02" },
+    // Fish
+    { masterId: taylor._id, categoryId: fishCategory._id, name: "Bubbles", dob: "2023-05-05" },
   ])
 
   const hash = await bcrypt.hash("password", 10)

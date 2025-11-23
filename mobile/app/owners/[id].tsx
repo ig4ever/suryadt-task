@@ -99,17 +99,19 @@ export default function OwnerDetailsScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <Image source={Icons.back} style={{ width: 24, height: 24 }} />
           </TouchableOpacity>
-          <MasterCard
-            style={{
-              position: "absolute",
-              right: 0,
-              left: 0,
-              top: 0,
-              bottom: 0,
-            }}
-            firstName={master?.firstName || ""}
-            lastName={master?.lastName || ""}
-          />
+          {master && (
+            <MasterCard
+              style={{
+                position: "absolute",
+                right: 0,
+                left: 0,
+                top: 0,
+                bottom: 0,
+              }}
+              firstName={master.firstName || ""}
+              lastName={master.lastName || ""}
+            />
+          )}
         </View>
 
         <View style={{ marginBottom: 24 }}>

@@ -44,3 +44,114 @@ cd mobile
 yarn install
 npm run android
 ```
+
+## Project Hierarchy
+
+### Backend
+
+```
+backend/
+├─ src/
+│  ├─ config/
+│  │  ├─ constants.ts
+│  │  ├─ database.ts
+│  │  ├─ env.ts
+│  │  ├─ redis.ts
+│  │  └─ swagger.ts
+│  ├─ controllers/
+│  │  ├─ category.controller.ts
+│  │  ├─ owner.controller.ts
+│  │  └─ pet.controller.ts
+│  ├─ middleware/
+│  │  ├─ auth.middleware.ts
+│  │  ├─ error.middleware.ts
+│  │  └─ rateLimit.middleware.ts
+│  ├─ models/
+│  │  ├─ category.model.ts
+│  │  ├─ owner.model.ts
+│  │  ├─ pet.model.ts
+│  │  └─ user.model.ts
+│  ├─ routes/
+│  │  ├─ auth.routes.ts
+│  │  ├─ category.routes.ts
+│  │  ├─ master.routes.ts
+│  │  └─ pet.routes.ts
+│  ├─ scripts/
+│  │  └─ seed.ts
+│  ├─ services/
+│  │  ├─ cache.service.ts
+│  │  ├─ category.service.ts
+│  │  ├─ owner.service.ts
+│  │  └─ pet.service.ts
+│  ├─ utils/
+│  │  ├─ ApiError.ts
+│  │  ├─ ApiResponse.ts
+│  │  ├─ asyncHandler.ts
+│  │  └─ pagination.ts
+│  ├─ app.ts
+│  ├─ server.ts
+│  └─ types.ts
+├─ docker-compose.dev.yml
+├─ docker-compose.prod.yml
+├─ Dockerfile.dev
+├─ Dockerfile.prod
+├─ nginx.conf
+└─ package.json
+```
+
+### Mobile
+
+```
+mobile/
+├─ app/
+│  ├─ owners/
+│  │  └─ [id].tsx
+│  ├─ _layout.tsx
+│  └─ index.tsx
+├─ assets/
+│  ├─ fonts/
+│  │  ├─ CircularStd-Book.ttf
+│  │  ├─ CircularStd.ttf
+│  │  └─ SF-Pro-Semibold.otf
+│  └─ icons/
+│     ├─ app_icon.png
+│     ├─ avatar-bg.png
+│     ├─ back.png
+│     ├─ chevron-right.png
+│     ├─ dropdown.png
+│     ├─ index.ts
+│     ├─ star-outline.png
+│     └─ star.png
+├─ components/
+│  ├─ atoms/
+│  │  └─ Text.tsx
+│  └─ molecules/
+│     ├─ MasterCard.tsx
+│     ├─ OwnerCard.tsx
+│     └─ PetCard.tsx
+├─ constants/
+│  ├─ Colors.ts
+│  └─ Config.ts
+├─ devtools/
+│  └─ reactotron.js
+├─ hooks/
+│  ├─ useApi.ts
+│  └─ useAuth.ts
+├─ services/
+│  ├─ api.service.ts
+│  ├─ auth.service.ts
+│  ├─ owner.service.tsx
+│  ├─ pet.service.ts
+│  ├─ storage.service.ts
+│  └─ token.service.ts
+├─ store/
+│  └─ favorites.ts
+├─ types/
+│  ├─ api.types.ts
+│  └─ global.types.ts
+├─ utils/
+│  ├─ helpers.ts
+│  └─ owners.ts
+├─ app.json
+└─ package.json
+```

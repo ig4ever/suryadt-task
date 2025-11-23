@@ -3,23 +3,33 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
-  Text,
   TouchableOpacity,
+  RefreshControl,
+  Image,
 } from "react-native";
 import { useOwners, useCurrentMaster } from "../hooks/useApi";
 import OwnerCard from "../components/molecules/OwnerCard";
 import { useState, useMemo, useEffect } from "react";
 import { tokenService } from "../services/token.service";
 import { useLogin } from "../hooks/useAuth";
+import Text from "../components/atoms/Text";
+import Colors from "../constants/Colors";
+import MasterCard from "../components/molecules/MasterCard";
+import { Icons } from "../assets/icons";
 
 export default function OwnersScreen() {
   const { mutateAsync: login } = useLogin();
 
   const [sortBy, setSortBy] = useState<"name" | "cats">("name");
-  const { data, isLoading, error, fetchNextPage, hasNextPage } = useOwners(
-    10,
-    sortBy
-  );
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+    isRefetching,
+  } = useOwners(10, sortBy);
   const { data: master } = useCurrentMaster();
 
   const owners = useMemo(
@@ -42,50 +52,8 @@ export default function OwnersScreen() {
     checkAuth();
   }, []);
 
-  if (isLoading) {
-    return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>Failed to retrieve data owners</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
-      {master && (
-        <View style={styles.header}>
-          <View style={styles.headerBadge}>
-            <Text style={styles.headerBadgeText}>
-              {`${master.firstName.charAt(0)}${master.lastName.charAt(
-                0
-              )}`.toUpperCase()}
-            </Text>
-          </View>
-          <Text style={styles.headerTitle}>
-            {`Master: ${master.firstName} ${master.lastName}`}
-          </Text>
-        </View>
-      )}
-
-      <View style={styles.listHeaderRow}>
-        <Text style={styles.sectionTitle}>Owners List</Text>
-        <TouchableOpacity
-          onPress={() => setSortBy(sortBy === "name" ? "cats" : "name")}
-        >
-          <Text style={styles.sortText}>
-            Sort By: {sortBy === "name" ? "Name" : "Cats"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       <FlatList
         data={owners}
         keyExtractor={(item) => item.id}
@@ -93,6 +61,57 @@ export default function OwnersScreen() {
         contentContainerStyle={styles.list}
         onEndReached={() => hasNextPage && fetchNextPage()}
         onEndReachedThreshold={0.5}
+        ListHeaderComponent={
+          <>
+            {master && (
+              <MasterCard
+                style={{ marginBottom: 32 }}
+                firstName={master.firstName}
+                lastName={master.lastName}
+              />
+            )}
+
+            <View style={styles.listHeaderRow}>
+              <Text font="circularstd-book" size={14} color={Colors.gray}>
+                Owners List
+              </Text>
+              <TouchableOpacity
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  alignContent: "center",
+                  gap: 5,
+                }}
+                onPress={() => setSortBy(sortBy === "name" ? "cats" : "name")}
+              >
+                <Text font="circularstd-book" size={12} color={Colors.gray20}>
+                  Sort By:
+                  <Text
+                    font="circularstd-book"
+                    size={12}
+                    color={Colors.gray20}
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {sortBy === "name" ? "Name" : "Cats"}
+                  </Text>
+                </Text>
+                <Image
+                  source={Icons.dropdown}
+                  style={{ width: 16, height: 16 }}
+                />
+              </TouchableOpacity>
+            </View>
+          </>
+        }
+        refreshControl={
+          <RefreshControl
+            refreshing={Boolean(isRefetching)}
+            onRefresh={() => {
+              checkAuth();
+              refetch();
+            }}
+          />
+        }
         ListFooterComponent={
           hasNextPage ? <ActivityIndicator style={{ padding: 20 }} /> : null
         }
@@ -104,33 +123,7 @@ export default function OwnersScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFC",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 8,
-  },
-  headerBadge: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#E5E7EB",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 8,
-  },
-  headerBadgeText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#6366F1",
-  },
-  headerTitle: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#111827",
+    backgroundColor: Colors.white,
   },
   listHeaderRow: {
     flexDirection: "row",
@@ -139,15 +132,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 8,
     paddingBottom: 8,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#111827",
-  },
-  sortText: {
-    fontSize: 14,
-    color: "#6B7280",
+    marginBottom: 24,
   },
   centerContainer: {
     flex: 1,
@@ -156,9 +141,5 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 16,
-  },
-  errorText: {
-    color: "red",
-    fontSize: 16,
   },
 });

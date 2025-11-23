@@ -1,5 +1,6 @@
 export interface Owner {
   _id: string;
+  id?: string;
   firstName: string;
   lastName: string;
   description?: string;
@@ -7,15 +8,6 @@ export interface Owner {
   isMaster: boolean;
   createdAt?: string;
   updatedAt?: string;
-}
-
-export interface OwnerListItem {
-  id: string;
-  firstName: string;
-  lastName: string;
-  description?: string;
-  favorites: boolean;
-  isMaster: boolean;
 }
 
 export interface Pet {

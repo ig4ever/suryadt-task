@@ -24,6 +24,7 @@ export default function RootLayout() {
           "CircularStd-Book": require("../assets/fonts/CircularStd-Book.ttf"),
           "SF-Pro-Semibold": require("../assets/fonts/SF-Pro-Semibold.otf"),
         });
+        console.log("Successfully loaded fonts");
       } catch (error) {
         console.error("Error loading fonts:", error);
       }

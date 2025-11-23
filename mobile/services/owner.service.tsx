@@ -1,5 +1,5 @@
 import apiClient from "./api.service";
-import { Owner, OwnerListItem, ApiResponse } from "../types/api.types";
+import { Owner, ApiResponse } from "../types/api.types";
 
 export const ownerService = {
   async getAll(
@@ -7,7 +7,7 @@ export const ownerService = {
     limit: number = 10,
     sortBy: "name" | "cats" = "name",
     search?: string
-  ): Promise<OwnerListItem[]> {
+  ): Promise<Owner[]> {
     const params = new URLSearchParams({
       page: String(page),
       limit: String(limit),

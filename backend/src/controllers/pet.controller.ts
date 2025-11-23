@@ -12,7 +12,17 @@ export const getPets = asyncHandler(async (req: Request, res: Response) => {
     name: p.name,
     dob: p.dob,
   }))
-  res.json({ ...result.pagination, data })
+  const qp: any = { ...req.query }
+  const base = `${req.baseUrl}${req.path}`
+  const build = (p: number) => {
+    qp.page = String(p)
+    qp.limit = String(result.pagination.limit)
+    const s = new URLSearchParams(qp as any).toString()
+    return `${base}?${s}`
+  }
+  const next = result.pagination.page < result.pagination.totalPages ? build(result.pagination.page + 1) : null
+  const prev = result.pagination.page > 1 ? build(result.pagination.page - 1) : null
+  res.json({ ...result.pagination, next, prev, data })
 })
 
 export const getPet = asyncHandler(async (req: Request, res: Response) => {

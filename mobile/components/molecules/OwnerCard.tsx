@@ -1,7 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { OwnerListItem } from "../../types/api.types";
 import { useFavorites } from "../../store/favorites";
+import Text from "../atoms/Text";
 
 interface OwnerCardProps {
   data: OwnerListItem;
@@ -9,21 +10,33 @@ interface OwnerCardProps {
 
 export default function OwnerCard({ data }: OwnerCardProps) {
   const router = useRouter();
-  const initials = `${(data.firstName || "").charAt(0)}${(data.lastName || "").charAt(0)}`.toUpperCase();
+  const initials = `${(data.firstName || "").charAt(0)}${(
+    data.lastName || ""
+  ).charAt(0)}`.toUpperCase();
   const { favorites, toggle } = useFavorites();
   const isFav = Boolean(favorites[data.id]);
 
   return (
-    <TouchableOpacity style={styles.card} onPress={() => router.push(`/owners/${data.id}`)}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => router.push(`/owners/${data.id}`)}
+    >
       <View style={styles.row}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>{initials}</Text>
         </View>
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>{`${data.firstName} ${data.lastName}`}</Text>
+          <Text
+            style={styles.name}
+          >{`${data.firstName} ${data.lastName}`}</Text>
         </View>
         <TouchableOpacity onPress={() => toggle(data.id)}>
-          <Text style={[styles.star, isFav ? styles.starFilled : styles.starOutline]}>
+          <Text
+            style={[
+              styles.star,
+              isFav ? styles.starFilled : styles.starOutline,
+            ]}
+          >
             {isFav ? "★" : "☆"}
           </Text>
         </TouchableOpacity>

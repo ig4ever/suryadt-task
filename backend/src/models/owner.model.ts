@@ -24,6 +24,9 @@ const ownerSchema = new Schema<IOwnerDocument>(
 );
 
 ownerSchema.index({ firstName: "text", lastName: "text" });
-ownerSchema.index({ isMaster: 1 }, { unique: true, partialFilterExpression: { isMaster: true } });
+ownerSchema.index(
+  { isMaster: 1 },
+  { unique: true, partialFilterExpression: { isMaster: true } }
+);
 
 export const Owner = mongoose.model<IOwnerDocument>("Owner", ownerSchema);

@@ -27,4 +27,4 @@
  *       tags: [pet]
  *       summary: delete a single pet by id.
  */
-export {}
+export {};

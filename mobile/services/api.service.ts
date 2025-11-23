@@ -40,6 +40,7 @@ apiClient.interceptors.response.use(
           return Promise.reject(error);
         }
         try {
+          console.log("refresh token success");
           const newAccess = res?.data?.accessToken;
           if (!newAccess) throw new Error("no token");
           await tokenService.setAccessToken(newAccess);

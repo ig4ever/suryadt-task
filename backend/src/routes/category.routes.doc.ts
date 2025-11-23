@@ -27,4 +27,4 @@
  *       tags: [category]
  *       summary: delete a single category by id.
  */
-export {}
+export {};

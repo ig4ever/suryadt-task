@@ -3,7 +3,13 @@ import { authService } from "../services/auth.service";
 
 export const useLogin = () => {
   return useMutation({
-    mutationFn: ({ username, password }: { username: string; password: string }) => authService.login(username, password),
+    mutationFn: ({
+      username,
+      password,
+    }: {
+      username: string;
+      password: string;
+    }) => authService.login(username, password),
   });
 };
 

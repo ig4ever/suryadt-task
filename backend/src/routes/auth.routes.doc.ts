@@ -8,4 +8,4 @@
  *       tags: [Auth]
  *       summary: Login to get access token
  */
-export {}
+export {};

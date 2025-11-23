@@ -7,10 +7,14 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useOwners, useCurrentMaster } from "../hooks/useApi";
-import OwnerCard from "../components/atoms/OwnerCard";
-import { useState, useMemo } from "react";
+import OwnerCard from "../components/molecules/OwnerCard";
+import { useState, useMemo, useEffect } from "react";
+import { tokenService } from "../services/token.service";
+import { useLogin } from "../hooks/useAuth";
 
 export default function OwnersScreen() {
+  const { mutateAsync: login } = useLogin();
+
   const [sortBy, setSortBy] = useState<"name" | "cats">("name");
   const { data, isLoading, error, fetchNextPage, hasNextPage } = useOwners(
     10,
@@ -18,7 +22,25 @@ export default function OwnersScreen() {
   );
   const { data: master } = useCurrentMaster();
 
-  
+  const owners = useMemo(
+    () => (data?.pages.flatMap((page) => page) as any) || [],
+    [data]
+  );
+
+  const checkAuth = async () => {
+    const token = await tokenService.getAccessToken();
+    if (!token) {
+      try {
+        await login({ username: "demo", password: "password" });
+      } catch (error) {
+        console.error("Auto-login failed:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   if (isLoading) {
     return (
@@ -35,11 +57,6 @@ export default function OwnersScreen() {
       </View>
     );
   }
-
-  const owners = useMemo(
-    () => (data?.pages.flatMap((page) => page) as any) || [],
-    [data]
-  );
 
   return (
     <View style={styles.container}>

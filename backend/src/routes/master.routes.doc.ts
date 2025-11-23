@@ -27,4 +27,4 @@
  *       tags: [master]
  *       summary: delete a single master by id.
  */
-export {}
+export {};

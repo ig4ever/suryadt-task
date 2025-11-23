@@ -1,5 +1,9 @@
-import { Query } from 'mongoose';
-import { PaginationParams, PaginationResult, PaginatedResponse } from '../types';
+import { Query } from "mongoose";
+import {
+  PaginationParams,
+  PaginationResult,
+  PaginatedResponse,
+} from "../types";
 
 export class Pagination {
   static paginate<T>(
@@ -7,14 +11,17 @@ export class Pagination {
     { page = 1, limit = 10, maxLimit = 100 }: PaginationParams
   ): PaginationResult & { query: Query<T[], T> } {
     const parsedPage = Math.max(1, parseInt(String(page)));
-    const parsedLimit = Math.min(Math.max(1, parseInt(String(limit))), maxLimit);
+    const parsedLimit = Math.min(
+      Math.max(1, parseInt(String(limit))),
+      maxLimit
+    );
     const skip = (parsedPage - 1) * parsedLimit;
 
     return {
       page: parsedPage,
       limit: parsedLimit,
       skip,
-      query: query.skip(skip).limit(parsedLimit)
+      query: query.skip(skip).limit(parsedLimit),
     };
   }
 
@@ -33,8 +40,8 @@ export class Pagination {
         limit,
         totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
-      }
+        hasPrev: page > 1,
+      },
     };
   }
 }

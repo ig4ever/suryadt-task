@@ -9,9 +9,7 @@ const router = Router();
 router.post("/register", async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "username and password are required" });
+    return res.status(400).json({ message: "username and password are required" });
   }
   const existing = await User.findOne({ username }).lean();
   if (existing) {
@@ -25,9 +23,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "username and password are required" });
+    return res.status(400).json({ message: "username and password are required" });
   }
   const user = await User.findOne({ username }).lean();
   if (!user) {
@@ -50,7 +46,7 @@ router.post("/login", async (req, res) => {
   const refreshToken = jwt.sign(
     { sub: username, type: "refresh" },
     JWT_SECRET || "secret",
-    { expiresIn: "7d" }
+    { expiresIn: "1m" }
   );
   res.json({ accessToken, refreshToken });
 });

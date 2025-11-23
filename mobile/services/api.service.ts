@@ -35,13 +35,8 @@ apiClient.interceptors.response.use(
     if (status === 401 && !original?._retry) {
       original._retry = true;
       return (async () => {
-        const res: any = await authService.refresh();
-        if (!res) {
-          return Promise.reject(error);
-        }
         try {
-          console.log("refresh token success");
-          const newAccess = res?.data?.accessToken;
+          const newAccess = await authService.refresh();
           if (!newAccess) throw new Error("no token");
           await tokenService.setAccessToken(newAccess);
           original.headers = original.headers || {};

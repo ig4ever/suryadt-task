@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import * as Font from "expo-font";
+import * as Updates from "expo-updates";
 if (__DEV__) {
   require("../devtools/reactotron");
 }
@@ -17,6 +18,18 @@ const queryClient = new QueryClient({
 
 export default function RootLayout() {
   useEffect(() => {
+    (async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch (error) {
+        console.warn(error);
+      }
+    })();
+
     const loadFonts = async () => {
       try {
         await Font.loadAsync({

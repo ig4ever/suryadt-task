@@ -25,6 +25,8 @@ RUN npm ci --only=production
 # Copy built JS output
 COPY --from=builder /app/dist ./dist
 
+COPY --from=builder /app/src ./src
+
 EXPOSE 3000
 
 USER node

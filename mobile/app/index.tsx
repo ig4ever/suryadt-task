@@ -68,6 +68,16 @@ export default function OwnersScreen() {
         contentContainerStyle={styles.list}
         onEndReached={() => hasNextPage && fetchNextPage()}
         onEndReachedThreshold={0.5}
+        ListEmptyComponent={() => (
+          <Text
+            font="circularstd-book"
+            size={14}
+            color={Colors.gray}
+            style={{ textAlign: "center" }}
+          >
+            No owners found
+          </Text>
+        )}
         ListHeaderComponent={
           <>
             {master && (

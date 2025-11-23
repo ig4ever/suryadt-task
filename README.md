@@ -45,6 +45,11 @@ yarn install
 npm run android
 ```
 
+### Notes
+
+- [Download APK](https://drive.google.com/file/d/1A6-0CGJy217xyEl0_fT7hoWoUJ3pPdv5/view)
+- [Swagger Docs](https://unsuppositional-humid-cleo.ngrok-free.dev/docs/)
+
 ## Project Hierarchy
 
 ### Backend

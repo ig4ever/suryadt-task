@@ -128,6 +128,16 @@ export default function OwnerDetailsScreen() {
             </Text>
           )}
           {loadingPets && <ActivityIndicator style={{ paddingVertical: 12 }} />}
+          {!pets && (
+            <Text
+              font="circularstd-book"
+              size={14}
+              color={Colors.gray}
+              style={{ textAlign: "center" }}
+            >
+              No pets found
+            </Text>
+          )}
           {pets.map((pet: Pet, idx: number) => (
             <PetCard key={`${pet.name}-${idx}`} data={pet} />
           ))}

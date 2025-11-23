@@ -16,7 +16,7 @@ const options = {
       },
     },
   },
-  apis: ["./src/routes/*.ts"],
+  apis: ["./src/routes/*.ts", "./dist/routes/*.js"],
 };
 
 export const setupSwagger = (app: Application): void => {

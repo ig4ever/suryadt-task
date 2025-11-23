@@ -16,9 +16,11 @@ import Text from "../components/atoms/Text";
 import Colors from "../constants/Colors";
 import MasterCard from "../components/molecules/MasterCard";
 import { Icons } from "../assets/icons";
+import { useRouter } from "expo-router";
 
 export default function OwnersScreen() {
   const { mutateAsync: login } = useLogin();
+  const router = useRouter();
 
   const [sortBy, setSortBy] = useState<"name" | "cats">("name");
   const {
@@ -57,7 +59,12 @@ export default function OwnersScreen() {
       <FlatList
         data={owners}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <OwnerCard data={item} />}
+        renderItem={({ item }) => (
+          <OwnerCard
+            data={item}
+            onPress={() => router.push(`/owners/${item.id}`)}
+          />
+        )}
         contentContainerStyle={styles.list}
         onEndReached={() => hasNextPage && fetchNextPage()}
         onEndReachedThreshold={0.5}

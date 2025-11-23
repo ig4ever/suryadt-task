@@ -9,10 +9,14 @@ import { Icons } from "../../assets/icons";
 interface OwnerCardProps {
   data: Owner;
   type?: "list" | "detail";
+  onPress?: (data: any) => void;
 }
 
-export default function OwnerCard({ data, type = "list" }: OwnerCardProps) {
-  const router = useRouter();
+export default function OwnerCard({
+  data,
+  type = "list",
+  onPress,
+}: OwnerCardProps) {
   const initials = `${(data.firstName || "").charAt(0)}${(
     data.lastName || ""
   ).charAt(0)}`.toUpperCase();
@@ -21,8 +25,9 @@ export default function OwnerCard({ data, type = "list" }: OwnerCardProps) {
 
   return (
     <TouchableOpacity
+      disabled={!onPress}
       style={[styles.card, type == "detail" && { paddingVertical: 24 }]}
-      onPress={() => router.push(`/owners/${data.id}`)}
+      onPress={onPress}
     >
       <View style={styles.row}>
         <View

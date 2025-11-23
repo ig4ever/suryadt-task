@@ -11,6 +11,7 @@ jest.mock("expo-secure-store", () => ({
 describe("OwnerCard", () => {
   it("toggles favorite star", () => {
     const owner = {
+      _id: "1",
       id: "1",
       firstName: "John",
       lastName: "Lennon",
